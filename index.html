@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>펫 확률 시뮬레이터</title>
+  <title>모비노기 펫 확률 시뮬레이터</title>
 
   <style>
     body {
@@ -34,7 +34,6 @@
       word-break: keep-all;
     }
 
-    /* 반짝 이모지 */
     .spark {
       font-size: 30px;
       animation: sparkle 1.4s infinite ease-in-out;
@@ -85,13 +84,11 @@
       white-space: pre-line;
     }
 
-    /* 등급 색상 */
     .epic { color: hotpink; }
     .elite { color: purple; }
     .rare { color: blue; }
     .high { color: green; }
 
-    /* 모바일에서 글씨 자동 크기축소 */
     @media (max-width: 380px) {
       h1 { font-size: 22px; }
       button { font-size: 16px; padding: 10px; }
@@ -104,7 +101,7 @@
 
 <div class="container">
 
-  <h1><span class="spark">✨</span> 펫 확률 시뮬레이터 <span class="spark">✨</span></h1>
+  <h1><span class="spark">✨</span> 모비노기 펫 확률 시뮬레이터 <span class="spark">✨</span></h1>
 
   <div class="button-row">
     <button onclick="draw(1)">1회 뽑기</button>
@@ -115,6 +112,9 @@
 </div>
 
 <script>
+  // ⭐ 누적 총 뽑기 횟수
+  let totalDraws = 0;
+
   const pets = [
     // -------- 에픽 --------
     { grade: "에픽", name: "턱시도 고양이", p: 0.00078 },
@@ -184,6 +184,9 @@
   function draw(times) {
     let output = "";
 
+    // ⭐ 뽑기 횟수 누적
+    totalDraws += times;
+
     for (let i = 0; i < times; i++) {
       const pet = pickOne();
 
@@ -197,9 +200,14 @@
         pet.grade === "엘리트" ? "💜" :
         pet.grade === "레어" ? "💙" : "💚";
 
+      const sparkle = pet.grade === "에픽" ? " ✨" : "";
+
       output += `[<span class="${color}">${pet.grade} ${heart}</span>] `
-              + `<span class="${color}">${pet.name}</span>\n`;
+              + `<span class="${color}">${pet.name}${sparkle}</span>\n`;
     }
+
+    // ⭐ 총 뽑기 횟수 표시 추가
+    output += `\n----------------------\n(총 뽑기 횟수: ${totalDraws}회)`;
 
     document.getElementById("result").innerHTML = output;
   }
